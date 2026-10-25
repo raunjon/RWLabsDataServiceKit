@@ -1,0 +1,54 @@
+{
+  "": {
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/master.swiftdeps"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Tests/RWLabsDataServiceKitTests/APIConfigurationTests.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/APIConfigurationTests.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/APIConfigurationTests.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/APIConfigurationTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/APIConfigurationTests.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/APIConfigurationTests.dia"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Tests/RWLabsDataServiceKitTests/APIErrorTests.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/APIErrorTests.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/APIErrorTests.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/APIErrorTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/APIErrorTests.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/APIErrorTests.dia"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Tests/RWLabsDataServiceKitTests/InterceptorTests.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/InterceptorTests.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/InterceptorTests.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/InterceptorTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/InterceptorTests.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/InterceptorTests.dia"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Tests/RWLabsDataServiceKitTests/JSONCodingTests.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/JSONCodingTests.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/JSONCodingTests.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/JSONCodingTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/JSONCodingTests.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/JSONCodingTests.dia"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Tests/RWLabsDataServiceKitTests/ReadmeSnippets.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/ReadmeSnippets.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/ReadmeSnippets.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/ReadmeSnippets~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/ReadmeSnippets.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/ReadmeSnippets.dia"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Tests/RWLabsDataServiceKitTests/Support/StubServer.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/StubServer.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/StubServer.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/StubServer~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/StubServer.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/StubServer.dia"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Tests/RWLabsDataServiceKitTests/URLSessionHTTPClientTests.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/URLSessionHTTPClientTests.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/URLSessionHTTPClientTests.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/URLSessionHTTPClientTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/URLSessionHTTPClientTests.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsDataServiceKitTests.build/URLSessionHTTPClientTests.dia"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "": {
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/master.swiftdeps"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Sources/RWLabsFoundation/Array+Helpers.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Array+Helpers.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Array+Helpers.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Array+Helpers~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Array+Helpers.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Array+Helpers.dia"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Sources/RWLabsFoundation/Constants.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Constants.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Constants.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Constants~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Constants.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Constants.dia"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Sources/RWLabsFoundation/Date+Helpers.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Date+Helpers.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Date+Helpers.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Date+Helpers~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Date+Helpers.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Date+Helpers.dia"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Sources/RWLabsFoundation/DateFormatterCache.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/DateFormatterCache.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/DateFormatterCache.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/DateFormatterCache~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/DateFormatterCache.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/DateFormatterCache.dia"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Sources/RWLabsFoundation/JSON+Helpers.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/JSON+Helpers.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/JSON+Helpers.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/JSON+Helpers~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/JSON+Helpers.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/JSON+Helpers.dia"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Sources/RWLabsFoundation/Numeric+Formatting.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Numeric+Formatting.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Numeric+Formatting.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Numeric+Formatting~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Numeric+Formatting.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Numeric+Formatting.dia"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Sources/RWLabsFoundation/Region+Countries.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Region+Countries.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Region+Countries.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Region+Countries~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Region+Countries.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Region+Countries.dia"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Sources/RWLabsFoundation/Region.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Region.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Region.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Region~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Region.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Region.dia"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Sources/RWLabsFoundation/String+Helpers.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/String+Helpers.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/String+Helpers.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/String+Helpers~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/String+Helpers.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/String+Helpers.dia"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Sources/RWLabsFoundation/Utils.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Utils.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Utils.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Utils~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Utils.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundation.build/Utils.dia"
+  }
+}

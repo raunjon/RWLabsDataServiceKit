@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundationTests.build/master.swiftdeps"
+  },
+  "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/Tests/RWLabsFoundationTests/RWLabsFoundationTests.swift": {
+    "dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundationTests.build/RWLabsFoundationTests.d",
+    "object": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundationTests.build/RWLabsFoundationTests.swift.o",
+    "swiftmodule": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundationTests.build/RWLabsFoundationTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundationTests.build/RWLabsFoundationTests.swiftdeps",
+    "diagnostics": "/Users/raunakjoneja/Documents/Work/iOS/RWLabs/RWLabsDataServiceKit/.build/arm64-apple-macosx/debug/RWLabsFoundationTests.build/RWLabsFoundationTests.dia"
+  }
+}
