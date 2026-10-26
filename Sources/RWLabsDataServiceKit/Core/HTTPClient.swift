@@ -48,8 +48,8 @@ public final class URLSessionHTTPClient: HTTPClient, @unchecked Sendable {
     public init(
         baseURL: URL,
         session: URLSession = .shared,
-        encoder: JSONEncoder = .rwlabs,
-        decoder: JSONDecoder = .rwlabs,
+        encoder: JSONEncoder,
+        decoder: JSONDecoder,
         interceptors: [any Interceptor] = []
     ) {
         self.baseURL = baseURL

@@ -41,10 +41,8 @@ public protocol APIConfigurationProtocol {
     /// Extra headers sent with every request (defaults to none)
     var additionalHeaders: [String: String] { get }
 
-    /// Encoder for request bodies (defaults to `JSONEncoder.rwlabs`)
     var encoder: JSONEncoder { get }
 
-    /// Decoder for response bodies, including `APIError` bodies (defaults to `JSONDecoder.rwlabs`)
     var decoder: JSONDecoder { get }
 
     /// Country, currency, locale and time zone for display formatting (defaults to `Region.current`)
@@ -58,10 +56,6 @@ public extension APIConfigurationProtocol {
     var environment: AppEnvironment { .current() }
 
     var additionalHeaders: [String: String] { [:] }
-
-    var encoder: JSONEncoder { .rwlabs }
-
-    var decoder: JSONDecoder { .rwlabs }
 
     var region: Region { .current }
 
@@ -109,13 +103,15 @@ public struct BaseURLs: Sendable, Equatable {
 ///     onUnauthorized: { await session.logOut() }
 /// )
 /// ```
-public struct APIConfiguration: APIConfigurationProtocol, Sendable {
+public struct DefaultAPIConfiguration: APIConfigurationProtocol, Sendable {
     public var environment: AppEnvironment
     public var baseURLs: BaseURLs
     public var metadata: ClientMetadata
     public var additionalHeaders: [String: String]
     public var region: Region
-
+    public let encoder: JSONEncoder = .init()
+    public let decoder: JSONDecoder = .init()
+    
     public init(config: APIConfigurationProtocol) {
         self.init(
             environment: config.environment,
@@ -222,41 +218,3 @@ public struct ClientMetadata: Sendable, Equatable {
     }
 }
 
-// MARK: - Client Factory
-
-public extension URLSessionHTTPClient {
-    /// Standard RWLabs client for a configuration
-    ///
-    /// Uses the configuration's base URL, encoder and decoder. Sends
-    /// `metadata.headers`, `additionalHeaders` and `X-Auth-Token` (when
-    /// `token` returns one) on every request, calls `onUnauthorized` on 401/403,
-    /// and logs in DEBUG builds. `interceptors` run after the headers and
-    /// before logging.
-    static func rwlabs(
-        configuration: some APIConfigurationProtocol,
-        session: URLSession = .shared,
-        token: @escaping @Sendable () async -> String? = { nil },
-        onUnauthorized: @escaping @Sendable () async -> Void = {},
-        interceptors: [any Interceptor] = []
-    ) -> URLSessionHTTPClient {
-        // Read once: the client never holds on to `configuration`
-        let baseURL = configuration.baseURL
-        let staticHeaders = configuration.metadata.headers.merging(configuration.additionalHeaders) { _, additional in additional }
-        let headers = HeadersInterceptor {
-            var headers = staticHeaders
-            if let token = await token() {
-                headers["X-Auth-Token"] = token
-            }
-            return headers
-        }
-        return URLSessionHTTPClient(
-            baseURL: baseURL,
-            session: session,
-            encoder: configuration.encoder,
-            decoder: configuration.decoder,
-            interceptors: [headers, UnauthorizedInterceptor(onUnauthorized: onUnauthorized)]
-                + interceptors
-                + [LoggingInterceptor()]
-        )
-    }
-}
