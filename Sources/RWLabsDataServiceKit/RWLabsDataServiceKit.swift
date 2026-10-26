@@ -61,7 +61,7 @@ import Foundation
 /// persistence layer can be added behind them later.
 public struct RWLabsDataServiceKit {
     /// Current version of RWLabsDataServiceKit
-    public static let version = "2.0.0"
+    public static let version = "1.0.0"
 
     /// Package name
     public static let name = "RWLabsDataServiceKit"
