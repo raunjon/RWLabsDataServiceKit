@@ -8,7 +8,7 @@ import Testing
 @testable import RWLabsDataServiceKit
 
 private func decode(_ json: String) throws -> APIError {
-    try JSONDecoder.rwlabs.decode(APIError.self, from: Data(json.utf8))
+    try JSONDecoder.snakeCase.decode(APIError.self, from: Data(json.utf8))
 }
 
 @Suite struct APIErrorDecodingTests {

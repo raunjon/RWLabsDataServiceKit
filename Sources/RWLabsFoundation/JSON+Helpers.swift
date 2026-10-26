@@ -22,8 +22,8 @@ public extension Data {
 }
 
 public extension Encodable {
-    /// Encodes with `encoder`. Pass `JSONEncoder.rwlabs` (RWLabsDataServiceKit)
-    /// to get the same snake_case keys and ISO dates the API uses.
+    /// Encodes with `encoder`. Pass your API configuration's encoder to get the
+    /// same keys and dates the API uses.
     func toData(encoder: JSONEncoder = JSONEncoder()) -> Data? {
         try? encoder.encode(self)
     }

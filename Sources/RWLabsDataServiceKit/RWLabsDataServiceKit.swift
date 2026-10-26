@@ -13,34 +13,38 @@ import Foundation
 ///
 /// 1. **Configure the API per environment:**
 /// ```swift
-/// let configuration = APIConfiguration(
-///     environment: .current(),   // from APP_ENVIRONMENT in Info.plist
-///     baseURLs: .init(
+/// struct AppConfig: APIConfigurationProtocol {
+///     let baseURLs = BaseURLs(
 ///         local: URL(string: "http://localhost:3000")!,
 ///         staging: URL(string: "https://staging-api.example.com")!,
 ///         production: URL(string: "https://api.example.com")!
-///     ),
-///     apiVersion: "application/api.example.v1",
-///     deviceIdentifier: deviceID
-/// )
+///     )
+///     var metadata: ClientMetadata {
+///         .current(apiVersion: "application/api.example.v1", deviceIdentifier: deviceID)
+///     }
+///     var encoder: JSONEncoder { .myAPI }   // your backend's conventions, defined in the app
+///     var decoder: JSONDecoder { .myAPI }
+/// }
 /// ```
 ///
 /// 2. **Create a client:**
 /// ```swift
-/// let client = URLSessionHTTPClient.rwlabs(
-///     configuration: configuration,
-///     token: { await session.token },
-///     onUnauthorized: { await session.logOut() }
+/// let config = AppConfig()
+/// let headers = config.metadata.headers.merging(config.additionalHeaders) { $1 }
+/// let client = URLSessionHTTPClient(
+///     baseURL: config.baseURL,
+///     encoder: config.encoder,
+///     decoder: config.decoder,
+///     interceptors: [
+///         HeadersInterceptor { headers },
+///         UnauthorizedInterceptor { await session.logOut() },
+///         LoggingInterceptor()
+///     ]
 /// )
 /// ```
 ///
 /// 3. **Declare endpoints next to their response types:**
 /// ```swift
-/// struct User: Codable, Sendable {
-///     let id: Int
-///     let fullName: String   // decoded from "full_name"
-/// }
-///
 /// extension Request where Response == User {
 ///     static func user(id: Int) -> Self { .get("users/\(id)") }
 /// }

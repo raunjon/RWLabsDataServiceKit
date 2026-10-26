@@ -32,7 +32,7 @@ import RWLabsFoundation
         (.production, "https://api.example.com")
     ])
     func baseURLFollowsEnvironment(environment: AppEnvironment, expected: String) {
-        let configuration = APIConfiguration(environment: environment, baseURLs: baseURLs(), metadata: metadata)
+        let configuration = DefaultAPIConfiguration(environment: environment, baseURLs: baseURLs(), metadata: metadata)
         #expect(configuration.baseURL.absoluteString == expected)
     }
 
@@ -50,56 +50,46 @@ import RWLabsFoundation
         #expect(!current.platform.isEmpty)
     }
 
-    @Test func clientSendsMetadataAdditionalHeadersAndToken() async throws {
+    @Test func metadataProducesTheStandardHeaders() {
+        #expect(metadata.headers == [
+            "X-Device-Identifier": "device-1",
+            "X-Platform": "ios",
+            "X-Accept": "application/json",
+            "X-App-Version": "2.3.0",
+            "X-OS-Version": "18.3",
+            "X-Api-Version": "application/api.test.v1"
+        ])
+    }
+
+    @Test func defaultConfigurationUsesPlainCoders() throws {
+        let configuration = DefaultAPIConfiguration(environment: .staging, baseURLs: baseURLs(), metadata: metadata)
+
+        let data = try configuration.encoder.encode(["fullName": "Ada"])
+        let json = try #require(try JSONSerialization.jsonObject(with: data) as? [String: Any])
+
+        #expect(json["fullName"] as? String == "Ada")
+    }
+
+    @Test func clientBuiltFromConfigurationSendsMetadataAndAdditionalHeaders() async throws {
         let server = StubServer(StubResponse(status: 204))
-        let configuration = APIConfiguration(
+        let configuration = DefaultAPIConfiguration(
             environment: .staging,
             baseURLs: baseURLs(staging: server.baseURL),
             metadata: metadata,
             additionalHeaders: ["X-Request-Source": "tests", "X-Platform": "override"]
         )
-        let client = URLSessionHTTPClient.rwlabs(configuration: configuration, session: server.session, token: { "secret" })
+        let client = URLSessionHTTPClient.configured(by: configuration, session: server.session)
 
         let _: EmptyResponse = try await client.send(.get("me"))
 
         let request = try #require(server.requests.first)
         #expect(request.url.absoluteString == "https://\(server.host)/api/me")
-        #expect(request.header("X-Auth-Token") == "secret")
         #expect(request.header("X-Device-Identifier") == "device-1")
         #expect(request.header("X-App-Version") == "2.3.0")
         #expect(request.header("X-OS-Version") == "18.3")
         #expect(request.header("X-Api-Version") == "application/api.test.v1")
         #expect(request.header("X-Request-Source") == "tests")
         #expect(request.header("X-Platform") == "override")
-    }
-
-    @Test func clientOmitsTokenHeaderWhenSignedOut() async throws {
-        let server = StubServer(StubResponse(status: 204))
-        let configuration = APIConfiguration(environment: .staging, baseURLs: baseURLs(staging: server.baseURL), metadata: metadata)
-        let client = URLSessionHTTPClient.rwlabs(configuration: configuration, session: server.session)
-
-        let _: EmptyResponse = try await client.send(.get("me"))
-
-        #expect(try #require(server.requests.first).header("X-Auth-Token") == nil)
-    }
-
-    @Test func clientCallsOnUnauthorized() async throws {
-        let server = StubServer(.json(401, "{}"))
-        let calls = Recorder<Void>()
-        let configuration = APIConfiguration(environment: .staging, baseURLs: baseURLs(staging: server.baseURL), metadata: metadata)
-        let client = URLSessionHTTPClient.rwlabs(
-            configuration: configuration,
-            session: server.session,
-            onUnauthorized: { calls.append(()) }
-        )
-
-        do {
-            let _: EmptyResponse = try await client.send(.get("me"))
-            Issue.record("Expected an error")
-        } catch {
-            #expect(error.isUnauthorized)
-        }
-        #expect(calls.values.count == 1)
     }
 }
 
@@ -123,6 +113,10 @@ private struct AppConfig: APIConfigurationProtocol {
         ClientMetadata(platform: "ios", deviceIdentifier: "device-1", appVersion: "2.3.0", osVersion: "18.3", apiVersion: "v1")
     }
 
+    var encoder: JSONEncoder { .snakeCase }
+
+    var decoder: JSONDecoder { .snakeCase }
+
     // Non-API, environment-specific setting living in the same type
     var analyticsKey: String { environment == .production ? "prod-key" : "dev-key" }
 
@@ -137,6 +131,8 @@ private struct MinimalConfig: APIConfigurationProtocol {
         production: URL(string: "https://api.example.com")!
     )
     let metadata = ClientMetadata(platform: "ios", deviceIdentifier: "d", appVersion: "1", osVersion: "18", apiVersion: "v1")
+    let encoder = JSONEncoder()
+    let decoder = JSONDecoder()
 }
 
 private struct Product: Codable, Equatable, Sendable {
@@ -175,7 +171,11 @@ private struct RemoteProductRepository: ProductRepository {
     @Test func appConfigDrivesARepositoryCall() async throws {
         let server = StubServer(.json(#"[{"id": 1, "display_name": "Lamp", "price_cents": 4500}]"#))
         let config = AppConfig(stagingURL: server.baseURL)
-        let client = URLSessionHTTPClient.rwlabs(configuration: config, session: server.session, token: { "secret" })
+        let client = URLSessionHTTPClient.configured(
+            by: config,
+            session: server.session,
+            interceptors: [HeadersInterceptor { ["X-Auth-Token": "secret"] }]
+        )
         let repository: any ProductRepository = RemoteProductRepository(client: client)
 
         let products = try await repository.products(in: "lighting")
@@ -224,22 +224,10 @@ private struct Event: Codable, Equatable, Sendable {
 
 @Suite struct CustomCodingConfigurationTests {
 
-    @Test func defaultCodersUseSnakeCase() throws {
-        let config = MinimalConfig()
-        let event = Event(eventName: "Launch", startsAt: Date(timeIntervalSince1970: 1_767_323_045))
-
-        let data = try config.encoder.encode(event)
-        let json = try #require(try JSONSerialization.jsonObject(with: data) as? [String: Any])
-
-        #expect(json["event_name"] as? String == "Launch")
-        #expect(json["starts_at"] as? String == "2026-01-02T03:04:05Z")
-        #expect(try config.decoder.decode(Event.self, from: data) == event)
-    }
-
     @Test func clientUsesTheConfiguredDecoderAndEncoder() async throws {
         let server = StubServer(.json(#"{"eventName": "Launch", "startsAt": 1767323045}"#))
-        let client = URLSessionHTTPClient.rwlabs(
-            configuration: CamelCaseBackendConfig(stagingURL: server.baseURL),
+        let client = URLSessionHTTPClient.configured(
+            by: CamelCaseBackendConfig(stagingURL: server.baseURL),
             session: server.session
         )
         let draft = Event(eventName: "Draft", startsAt: Date(timeIntervalSince1970: 0))
@@ -284,14 +272,14 @@ private final class BundleToken {}
 
     @Test func initStoresRegionWithoutChangingTheGlobal() {
         // No other test sets Japan, so seeing it in Region.current would mean the init leaked it
-        let configuration = APIConfiguration(region: .japan, baseURLs: baseURLs, metadata: metadata)
+        let configuration = DefaultAPIConfiguration(region: .japan, baseURLs: baseURLs, metadata: metadata)
 
         #expect(configuration.region == .japan)
         #expect(Region.current != .japan)
     }
 
     @Test func initFromConformerCopiesItsRegion() {
-        let configuration = APIConfiguration(config: AppConfig())
+        let configuration = DefaultAPIConfiguration(config: AppConfig())
 
         #expect(configuration.region == .india)
         #expect(configuration.environment == .staging)
@@ -301,7 +289,7 @@ private final class BundleToken {}
         let server = StubServer(StubResponse(status: 204))
         let config = CamelCaseBackendConfig(stagingURL: server.baseURL)
 
-        let _: EmptyResponse = try await URLSessionHTTPClient.rwlabs(configuration: config, session: server.session).send(.get("ping"))
+        let _: EmptyResponse = try await URLSessionHTTPClient.configured(by: config, session: server.session).send(.get("ping"))
 
         #expect(server.requests.count == 1)
     }

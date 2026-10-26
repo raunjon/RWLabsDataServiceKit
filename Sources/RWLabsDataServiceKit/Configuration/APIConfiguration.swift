@@ -7,13 +7,16 @@
 
 import Foundation
 import RWLabsFoundation
+
 /// Describes how an app talks to its API: which environment it targets, the
-/// base URL of each environment, and the metadata sent with every request
+/// base URL of each environment, the metadata sent with every request, and
+/// the coders for request and response bodies
 ///
 /// Conform an app-side type to keep API settings next to the rest of the
-/// app's environment-specific configuration, or use `APIConfiguration`.
-/// `URLSessionHTTPClient.rwlabs(configuration:)` reads these values once when
-/// it builds the client, so build a new client if the environment changes.
+/// app's environment-specific configuration, or use `DefaultAPIConfiguration`.
+/// Build the client from it once (`baseURL`, `encoder`, `decoder`, and
+/// `metadata.headers` through a `HeadersInterceptor`); build a new client if
+/// the environment changes.
 ///
 /// Example:
 /// ```swift
@@ -26,6 +29,8 @@ import RWLabsFoundation
 ///     var metadata: ClientMetadata {
 ///         .current(apiVersion: "application/api.thirtyplus.v1", deviceIdentifier: DeviceID.persisted)
 ///     }
+///     var encoder: JSONEncoder { .myAPI }   // the app's own coders
+///     var decoder: JSONDecoder { .myAPI }
 /// }
 /// ```
 public protocol APIConfigurationProtocol {
@@ -41,8 +46,10 @@ public protocol APIConfigurationProtocol {
     /// Extra headers sent with every request (defaults to none)
     var additionalHeaders: [String: String] { get }
 
+    /// Encoder for request bodies (no default: key and date conventions belong to the backend)
     var encoder: JSONEncoder { get }
 
+    /// Decoder for response bodies, including `APIError` bodies
     var decoder: JSONDecoder { get }
 
     /// Country, currency, locale and time zone for display formatting (defaults to `Region.current`)
@@ -86,9 +93,12 @@ public struct BaseURLs: Sendable, Equatable {
 
 /// Ready-made `APIConfigurationProtocol` for apps that don't need their own type
 ///
+/// Uses plain `JSONEncoder()` / `JSONDecoder()` (camelCase keys, default date
+/// strategy). Conform your own type instead when the backend needs other coders.
+///
 /// Example:
 /// ```swift
-/// let configuration = APIConfiguration(
+/// let configuration = DefaultAPIConfiguration(
 ///     baseURLs: .init(
 ///         local: URL(string: "http://localhost:3000")!,
 ///         staging: URL(string: "https://staging-api.thirtyplus.com")!,
@@ -96,11 +106,6 @@ public struct BaseURLs: Sendable, Equatable {
 ///     ),
 ///     apiVersion: "application/api.thirtyplus.v1",
 ///     deviceIdentifier: DeviceID.persisted
-/// )
-/// let client = URLSessionHTTPClient.rwlabs(
-///     configuration: configuration,
-///     token: { await session.token },
-///     onUnauthorized: { await session.logOut() }
 /// )
 /// ```
 public struct DefaultAPIConfiguration: APIConfigurationProtocol, Sendable {

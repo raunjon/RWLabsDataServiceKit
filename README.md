@@ -6,7 +6,7 @@ The package has two products:
 
 | Product | What it is | Depends on |
 |---|---|---|
-| `RWLabsDataServiceKit` | HTTP client, typed errors, interceptors, per-environment API configuration, JSON coding | `RWLabsFoundation` |
+| `RWLabsDataServiceKit` | HTTP client, typed errors, interceptors, per-environment API configuration | `RWLabsFoundation` |
 | `RWLabsFoundation` | Region (country, currency, locale, time zone) presets for every country, date and currency formatting, relative time, small conveniences | nothing |
 
 ## Requirements
@@ -16,11 +16,11 @@ The package has two products:
 
 ## Installation
 
-Add the package as a local dependency:
+Releases are tagged with semantic versions. Add the package by version:
 
 ```swift
 dependencies: [
-    .package(path: "../RWLabsDataServiceKit")
+    .package(url: "https://github.com/raunjon/RWLabsDataServiceKit.git", from: "1.0.0")
 ],
 targets: [
     .target(
@@ -33,7 +33,9 @@ targets: [
 ]
 ```
 
-In Xcode: File → Add Package Dependencies… → Add Local…, then pick the products you need.
+In Xcode: File → Add Package Dependencies…, enter the repository URL, choose **Up to Next Major Version** from `1.0.0`, and add both products to the app target. Link `RWLabsFoundation` explicitly if you import it, rather than relying on it coming in through `RWLabsDataServiceKit`.
+
+To work on the library and an app at the same time, drag the local `RWLabsDataServiceKit` folder into the app's Xcode project: the local copy overrides the versioned dependency until you remove it.
 
 ## Quick start
 
@@ -59,6 +61,10 @@ struct AppConfig: APIConfigurationProtocol {
         .current(apiVersion: "application/api.example.v1", deviceIdentifier: DeviceID.persisted)
     }
 
+    // Your backend's key and date conventions (see "Coders" below)
+    var encoder: JSONEncoder { .myAPI }
+    var decoder: JSONDecoder { .myAPI }
+
     var region: Region { .india }
 
     // Non-API settings can live here as well
@@ -66,10 +72,10 @@ struct AppConfig: APIConfigurationProtocol {
 }
 ```
 
-If you don't need your own type, use the `APIConfiguration` struct:
+If you don't need your own type, use `DefaultAPIConfiguration`. It uses plain `JSONEncoder()` / `JSONDecoder()`:
 
 ```swift
-let config = APIConfiguration(
+let config = DefaultAPIConfiguration(
     region: .india,
     baseURLs: BaseURLs(local: …, staging: …, production: …),
     apiVersion: "application/api.example.v1",
@@ -81,40 +87,53 @@ let config = APIConfiguration(
 |---|---|
 | `baseURLs` | required |
 | `metadata` | required |
+| `encoder` / `decoder` | required |
 | `environment` | `AppEnvironment.current()` |
 | `additionalHeaders` | `[:]` |
-| `encoder` / `decoder` | `.rwlabs` (snake_case keys, ISO 8601 dates) |
 | `region` | `Region.current` |
 
 ### 2. Create one client at launch
 
+Build the client from the configuration once, and apply the region for formatting:
+
 ```swift
-let client = URLSessionHTTPClient.rwlabs(
-    configuration: AppConfig.shared,
-    token: { await AuthStore.shared.token },
-    onUnauthorized: { await AuthStore.shared.logOut() }
+let config = AppConfig.shared
+let headers = config.metadata.headers.merging(config.additionalHeaders) { $1 }
+
+let client = URLSessionHTTPClient(
+    baseURL: config.baseURL,
+    encoder: config.encoder,
+    decoder: config.decoder,
+    interceptors: [
+        HeadersInterceptor {
+            var all = headers
+            if let token = await AuthStore.shared.token {
+                all["X-Auth-Token"] = token
+            }
+            return all
+        },
+        UnauthorizedInterceptor { await AuthStore.shared.logOut() },
+        LoggingInterceptor()
+    ]
 )
 
-// Apply the region app-wide for formatting
-Region.current = AppConfig.shared.region
+Region.current = config.region
 ```
 
-The factory reads the configuration once. It:
+- `metadata.headers` gives the `X-Device-Identifier`, `X-Platform`, `X-Accept`, `X-App-Version`, `X-OS-Version` and `X-Api-Version` headers.
+- `HeadersInterceptor`'s closure runs before every request, so a refreshed token is picked up.
+- `UnauthorizedInterceptor` runs on any 401 or 403.
+- `LoggingInterceptor` logs requests and responses in DEBUG builds, with the auth token redacted. Put it last so it logs the final headers.
 
-- sends the `X-Device-Identifier`, `X-Platform`, `X-Accept`, `X-App-Version`, `X-OS-Version` and `X-Api-Version` headers, plus `additionalHeaders`;
-- sends `X-Auth-Token` whenever `token()` returns a value (it is called before every request, so a refreshed token is picked up);
-- calls `onUnauthorized` on any 401 or 403;
-- logs requests and responses in DEBUG builds, with the auth token redacted.
-
-If the environment changes at runtime (for example from a debug menu), build a new client.
+Wrap this in a factory in your app (for example `URLSessionHTTPClient.myApp(configuration:token:onUnauthorized:)`) so every target builds the client the same way. If the environment changes at runtime (for example from a debug menu), build a new client.
 
 ### 3. Declare endpoints next to their models
 
 ```swift
 struct Product: Codable, Sendable, Identifiable {
     let id: Int
-    let displayName: String   // "display_name" in JSON
-    let priceCents: Int       // "price_cents"
+    let displayName: String   // "display_name" with a snake_case decoder
+    let priceCents: Int
 }
 
 extension Request where Response == [Product] {
@@ -125,7 +144,7 @@ extension Request where Response == [Product] {
 
 extension Request where Response == Product {
     static func createProduct(_ draft: ProductDraft) -> Self {
-        .post("products", body: draft)   // encoded as snake_case JSON
+        .post("products", body: draft)   // encoded with the client's encoder
     }
 }
 
@@ -221,7 +240,7 @@ The body of a non-2xx response is decoded leniently into `APIError`. An unexpect
 | `message` | `message`, else `error.message`, else `error` when it is a string |
 | `status` | `status` at either level, number or string |
 | `code` | `code` at either level |
-| `fieldErrors` | `errors` keyed by field. Field names follow the decoder's key strategy, so `first_name` becomes `firstName` with the default decoder. A plain list is stored under `"base"`. |
+| `fieldErrors` | `errors` keyed by field. Field names follow the decoder's key strategy, so `first_name` becomes `firstName` with `.convertFromSnakeCase`. A plain list is stored under `"base"`. |
 
 `apiError` is `nil` when the body has none of these fields.
 
@@ -244,16 +263,10 @@ Built-in interceptors:
 - `UnauthorizedInterceptor(retry:onUnauthorized:)`: runs a handler on 401/403. With `retry: true`, the request is sent again after the handler finishes, for example after refreshing a token.
 - `LoggingInterceptor(redactedHeaders:)`: DEBUG-only request and response logging.
 
-Pass extra interceptors to the factory; they run after the standard headers and before logging:
+For example, to refresh an expired token and retry once:
 
 ```swift
-let client = URLSessionHTTPClient.rwlabs(
-    configuration: AppConfig.shared,
-    token: { await AuthStore.shared.token },
-    interceptors: [
-        UnauthorizedInterceptor(retry: true) { await AuthStore.shared.refresh() }
-    ]
-)
+UnauthorizedInterceptor(retry: true) { await AuthStore.shared.refresh() }
 ```
 
 ## Progress
@@ -275,15 +288,31 @@ Progress goes from 0.0 to 1.0. When the server doesn't send a content length, it
 
 To reach a plain-HTTP local server, add `NSAllowsLocalNetworking` under `NSAppTransportSecurity` in the app's Info.plist. The iOS Simulator reaches the Mac's `localhost` directly.
 
-## JSON coding
+## Coders
 
-`JSONEncoder.rwlabs` and `JSONDecoder.rwlabs` are the defaults:
+The library has no built-in coders: the configuration's `encoder` and `decoder` are used for request bodies, responses and `APIError` bodies. Define your backend's conventions once in the app, for example:
 
-- Keys are converted between camelCase and snake_case (`userId` ↔ `user_id`). A property named `userID` will not match `user_id`.
-- Dates encode as ISO 8601 in UTC (`2026-01-02T03:04:05Z`).
-- Dates decode from ISO 8601 with or without fractional seconds and with any offset, from `yyyy-MM-dd HH:mm:ss zzz`, and from date-only `yyyy-MM-dd` (as midnight UTC).
+```swift
+extension JSONEncoder {
+    static var myAPI: JSONEncoder {
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        encoder.dateEncodingStrategy = .iso8601
+        return encoder
+    }
+}
 
-Override `encoder` / `decoder` in your configuration for a backend with other conventions.
+extension JSONDecoder {
+    static var myAPI: JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }
+}
+```
+
+With `.convertFromSnakeCase`, a property named `userID` will not match `user_id`; name it `userId`.
 
 ## Testing your app
 

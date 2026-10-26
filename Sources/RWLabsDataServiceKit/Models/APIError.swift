@@ -30,7 +30,7 @@ public struct APIError: Decodable, Sendable, Equatable {
     ///
     /// A plain list (`["Something went wrong"]`) is stored under `"base"`.
     /// Field names go through the decoder's key strategy, so with
-    /// `JSONDecoder.rwlabs` `first_name` arrives as `firstName`.
+    /// `.convertFromSnakeCase` `first_name` arrives as `firstName`.
     public var fieldErrors: [String: [String]]
 
     public init(message: String? = nil, status: Int? = nil, code: String? = nil, fieldErrors: [String: [String]] = [:]) {

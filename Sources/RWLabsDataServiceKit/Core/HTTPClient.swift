@@ -21,6 +21,8 @@ public protocol HTTPClient: Sendable {
 /// ```swift
 /// let client = URLSessionHTTPClient(
 ///     baseURL: URL(string: "https://api.example.com")!,
+///     encoder: encoder,
+///     decoder: decoder,
 ///     interceptors: [
 ///         HeadersInterceptor { ["X-Auth-Token": await tokenStore.token ?? ""] },
 ///         UnauthorizedInterceptor { await session.logOut() },

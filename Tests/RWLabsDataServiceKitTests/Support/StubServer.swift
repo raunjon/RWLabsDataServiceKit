@@ -70,7 +70,7 @@ final class StubServer: @unchecked Sendable {
     }
 
     func client(interceptors: [any Interceptor] = []) -> URLSessionHTTPClient {
-        URLSessionHTTPClient(baseURL: baseURL, session: session, interceptors: interceptors)
+        URLSessionHTTPClient(baseURL: baseURL, session: session, encoder: .snakeCase, decoder: .snakeCase, interceptors: interceptors)
     }
 
     fileprivate func respond(to request: RecordedRequest) throws -> StubResponse {
