@@ -33,6 +33,10 @@ public struct APIError: Decodable, Sendable, Equatable, Error {
     /// `.convertFromSnakeCase` `first_name` arrives as `firstName`.
     public var fieldErrors: [String: [String]]
 
+    public var localizedDescription: String {
+        message ?? "API Error"
+    }
+    
     public init(message: String? = nil, status: Int? = nil, code: String? = nil, fieldErrors: [String: [String]] = [:]) {
         self.message = message
         self.status = status
