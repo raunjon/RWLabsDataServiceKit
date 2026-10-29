@@ -126,7 +126,7 @@ public extension Request {
 // MARK: - Empty Payload
 
 /// Payload for endpoints that only return success/error (e.g. delete operations)
-public struct EmptyPayload: Codable & Sendable & Equatable {
+public struct EmptyPayload: Encodable & Sendable & Equatable {
     init() {}
 }
 

@@ -16,7 +16,7 @@ import Foundation
 /// {"status": 422, "code": "validation_failed", "errors": {"email": ["is invalid"]}}
 /// {"errors": ["Something went wrong"]}
 /// ```
-public struct APIError: Decodable, Sendable, Equatable {
+public struct APIError: Decodable, Sendable, Equatable, Error {
     /// Human-readable message: top-level `message`, else `error.message`, else `error` when it is a string
     public var message: String?
 
