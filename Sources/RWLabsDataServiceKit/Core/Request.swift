@@ -123,6 +123,13 @@ public extension Request {
     }
 }
 
+// MARK: - Empty Payload
+
+/// Payload for endpoints that only return success/error (e.g. delete operations)
+public struct EmptyPayload: Codable & Sendable & Equatable {
+    init() {}
+}
+
 // MARK: - Empty Response
 
 /// Response type for endpoints that return no body (e.g. 204 No Content)
