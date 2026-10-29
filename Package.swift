@@ -16,9 +16,7 @@ let package = Package(
             targets: ["RWLabsDataServiceKit"]),
     ],
     dependencies: [
-        // Local checkout until RWLabsFoundation is on GitHub; then switch to
-        // .package(url: "https://github.com/raunjon/RWLabsFoundation.git", from: "1.0.0")
-        .package(path: "../RWLabsFoundation"),
+        .package(url: "https://github.com/raunjon/RWLabsFoundation.git", from: "1.0.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
