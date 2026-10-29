@@ -14,29 +14,24 @@ let package = Package(
         .library(
             name: "RWLabsDataServiceKit",
             targets: ["RWLabsDataServiceKit"]),
-        .library(
-            name: "RWLabsFoundation",
-            targets: ["RWLabsFoundation"]),
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
+        // Local checkout until RWLabsFoundation is on GitHub; then switch to
+        // .package(url: "https://github.com/raunjon/RWLabsFoundation.git", from: "1.0.0")
+        .package(path: "../RWLabsFoundation"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "RWLabsDataServiceKit",
-            dependencies: ["RWLabsFoundation"]),
+            dependencies: [.product(name: "RWLabsFoundation", package: "RWLabsFoundation")]),
         .testTarget(
             name: "RWLabsDataServiceKitTests",
-            dependencies: ["RWLabsDataServiceKit"]),
-        // Formatting and convenience helpers; independent of the networking library
-        .target(
-            name: "RWLabsFoundation",
-            dependencies: []),
-        .testTarget(
-            name: "RWLabsFoundationTests",
-            dependencies: ["RWLabsFoundation"]),
+            dependencies: [
+                "RWLabsDataServiceKit",
+                .product(name: "RWLabsFoundation", package: "RWLabsFoundation"),
+            ]),
     ],
     swiftLanguageModes: [.v5]
 )

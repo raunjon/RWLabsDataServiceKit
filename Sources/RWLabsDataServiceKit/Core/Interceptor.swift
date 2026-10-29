@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RWLabsFoundation
 
 /// What the client should do after an interceptor has seen a response
 public enum InterceptorAction: Sendable {

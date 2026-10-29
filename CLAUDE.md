@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-RWLabsDataServiceKit is a dependency-free Swift package providing the async/await networking layer for RWLabs/ThirtyPlus apps, with a SwiftData persistence layer planned later. Apps consume tagged releases from GitHub (`raunjon/RWLabsDataServiceKit`), so public API changes need a version bump: major for breaking changes. RWLabsExamples vendors its own older copy under `Libraries/` and does not track this package.
+RWLabsDataServiceKit is a Swift package (its only dependency is RWLabsFoundation) providing the async/await networking layer for RWLabs/ThirtyPlus apps, with a SwiftData persistence layer planned later. Apps consume tagged releases from GitHub (`raunjon/RWLabsDataServiceKit`), so public API changes need a version bump: major for breaking changes. RWLabsExamples vendors its own older copy under `Libraries/` and does not track this package.
 
 ## Build & test
 
@@ -16,13 +16,13 @@ swift build
 swift test
 ```
 
-Run a single test with `swift test --filter <Suite>/<testName>`. To check iOS as well, use the `RWLabsDataServiceKit-Package` scheme (runs both test targets) with a simulator id from `xcodebuild -scheme RWLabsDataServiceKit-Package -showdestinations` (names are ambiguous across installed runtimes):
+Run a single test with `swift test --filter <Suite>/<testName>`. To check iOS as well, use the `RWLabsDataServiceKit` scheme with a simulator id from `xcodebuild -scheme RWLabsDataServiceKit -showdestinations` (names are ambiguous across installed runtimes):
 
 ```bash
-xcodebuild test -scheme RWLabsDataServiceKit-Package -destination 'platform=iOS Simulator,id=<simulator-id>'
+xcodebuild test -scheme RWLabsDataServiceKit -destination 'platform=iOS Simulator,id=<simulator-id>'
 ```
 
-Tests use Swift Testing. Locale-formatted output (currency, relative dates) differs between ICU versions on iOS and macOS, so compare it loosely (e.g. ignore whitespace). `Tests/.../Support/StubServer.swift` serves canned responses through a `URLProtocol` keyed by a unique host per server, so suites run in parallel safely; build new networking tests on it rather than hitting the network.
+Tests use Swift Testing. `Tests/.../Support/StubServer.swift` serves canned responses through a `URLProtocol` keyed by a unique host per server, so suites run in parallel safely; build new networking tests on it rather than hitting the network.
 
 Package: swift-tools 6.0 in Swift 5 language mode (`swiftLanguageModes: [.v5]`), iOS 15+ / macOS 12+. Typed throws (`throws(NetworkError)`) is used throughout.
 
@@ -30,7 +30,7 @@ Releases are semver git tags (`1.0.0` first), consumed by apps with `from:`/Up t
 
 ## Architecture
 
-Two products: `RWLabsDataServiceKit` (networking, depends on `RWLabsFoundation`) and `RWLabsFoundation` (formatting/convenience helpers, must not depend on the networking library). The package has been refactored folder by folder; only `Utilities/Log.swift` has not been reviewed. README.md is the user-facing guide; keep its examples in sync with API changes.
+One product, `RWLabsDataServiceKit` (networking). The package has been refactored folder by folder; only `Utilities/Log.swift` has not been reviewed. README.md is the user-facing guide; keep its examples in sync with API changes.
 
 ### Core (`Sources/RWLabsDataServiceKit/Core`)
 
@@ -53,12 +53,6 @@ Two products: `RWLabsDataServiceKit` (networking, depends on `RWLabsFoundation`)
 
 The library no longer ships Interactor/Repository/Interactable abstractions or a static-config protocol. Apps declare their own repository protocols that view models depend on, implemented over `any HTTPClient` and the `Request` factories, so a persistence-backed implementation can be swapped in later. Remaining protocols: `BaseItem` (`Codable & Identifiable & Hashable`, synthesized equality over all properties) and `Mockable`.
 
-### RWLabsFoundation (`Sources/RWLabsFoundation`)
+### RWLabsFoundation dependency
 
-App-level helpers moved out of the networking library: date parsing/formatting (`String.toDate`, `toISO8601Date`, `Date.toString`, DST-safe `add(days:)`), locale-aware currency (`toCurrency(code:locale:)`, also on `Decimal`), relative time (`Utils.getLastPosted`/`getTimestamp`), JSON conveniences, and `Unicodes`/`DateFormats` constants. Conventions: fixed-format parsing uses `Locale.posix` and is unaffected by region; display formatting (currency code, locale, time zone, calendar) defaults to `Region.current` (country, currency, locale, time zone; starts as `Region.default` = INR with the device's locale/time zone, presets `.india` and `.device`, set once at app launch). Tests that change `Region.current` must restore it and keep its time zone, since suites run in parallel; formatters are cached in `DateFormatterCache`; time-dependent helpers take `now:`/`calendar:` parameters for tests. The networking library keeps only an internal `Data.prettyPrintedJSON` (for logging) and `URL.queryParameters`; do not declare the same extension member in both modules, or call sites importing both become ambiguous.
-
-`Region+Countries.swift` (one `Region` preset per ISO country plus `Region.all`, looked up with `Region(countryCode:)`) is generated; do not edit it by hand. Change `Scripts/GenerateRegions.swift` (primary time zones for multi-zone countries, property-name overrides) and regenerate on macOS:
-
-```bash
-swift Scripts/GenerateRegions.swift > Sources/RWLabsFoundation/Region+Countries.swift
-```
+Formatting/convenience helpers (`Region`, date and currency formatting, `Data.prettyPrintedJSON` used by `LoggingInterceptor`, `URL.queryParameters`) live in the separate RWLabsFoundation package (`raunjon/RWLabsFoundation`), which must not depend on this one. `Package.swift` points at a sibling checkout (`../RWLabsFoundation`) until that package is on GitHub; switch to its URL with `from:` before tagging a release, since apps cannot resolve a path dependency. Do not redeclare its extension members here, or call sites importing both modules become ambiguous.

@@ -1,13 +1,8 @@
 # RWLabsDataServiceKit
 
-An async/await networking library for RWLabs apps, plus a small set of formatting helpers.
+An async/await networking library for RWLabs apps: HTTP client, typed errors, interceptors and per-environment API configuration.
 
-The package has two products:
-
-| Product | What it is | Depends on |
-|---|---|---|
-| `RWLabsDataServiceKit` | HTTP client, typed errors, interceptors, per-environment API configuration | `RWLabsFoundation` |
-| `RWLabsFoundation` | Region (country, currency, locale, time zone) presets for every country, date and currency formatting, relative time, small conveniences | nothing |
+It depends on [RWLabsFoundation](https://github.com/raunjon/RWLabsFoundation) (Region presets, date and currency formatting, small conveniences), which used to ship as a second product of this package.
 
 ## Requirements
 
@@ -20,20 +15,21 @@ Releases are tagged with semantic versions. Add the package by version:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/raunjon/RWLabsDataServiceKit.git", from: "1.0.0")
+    .package(url: "https://github.com/raunjon/RWLabsDataServiceKit.git", from: "1.0.0"),
+    .package(url: "https://github.com/raunjon/RWLabsFoundation.git", from: "1.0.0")
 ],
 targets: [
     .target(
         name: "MyApp",
         dependencies: [
             .product(name: "RWLabsDataServiceKit", package: "RWLabsDataServiceKit"),
-            .product(name: "RWLabsFoundation", package: "RWLabsDataServiceKit")
+            .product(name: "RWLabsFoundation", package: "RWLabsFoundation")
         ]
     )
 ]
 ```
 
-In Xcode: File → Add Package Dependencies…, enter the repository URL, choose **Up to Next Major Version** from `1.0.0`, and add both products to the app target. Link `RWLabsFoundation` explicitly if you import it, rather than relying on it coming in through `RWLabsDataServiceKit`.
+In Xcode: File → Add Package Dependencies…, enter the repository URL, choose **Up to Next Major Version** from `1.0.0`, and add `RWLabsDataServiceKit` to the app target. If the app imports `RWLabsFoundation` (for example to set `Region.current`), add that package too rather than relying on it coming in through `RWLabsDataServiceKit`.
 
 To work on the library and an app at the same time, drag the local `RWLabsDataServiceKit` folder into the app's Xcode project: the local copy overrides the versioned dependency until you remove it.
 
@@ -329,44 +325,6 @@ struct FakeClient: HTTPClient {
 }
 ```
 
-## RWLabsFoundation
-
-### Region
-
-`Region` holds a country code, currency code, locale and time zone. There is a preset for every country, generated from system data:
-
-```swift
-Region.india            // IN, INR, en_IN, Asia/Kolkata
-Region.unitedStates     // US, USD, en_US, America/New_York
-Region.unitedKingdom    // GB, GBP, en_GB, Europe/London
-Region(countryCode: "jp")   // lookup by ISO code, case-insensitive
-Region.all              // every preset, sorted by code (Identifiable, ready for a picker)
-Region.device           // the device's own settings
-```
-
-Every preset uses an `en_<country>` locale: English text with the country's number and date formats. Countries spanning several time zones use the capital's or the most populous one.
-
-Each region also gives you `countryName()`, `currencyName()`, `currencySymbol` and a Gregorian `calendar` in its time zone.
-
-`Region.current` is what the formatting helpers default to. It starts as INR with the device's locale and time zone; set it once at launch.
-
-### Formatting helpers
-
-```swift
-1234.5.toCurrency()                            // "₹1,234.50" with Region.current = .india
-Decimal(string: "19.99")!.toCurrency(code: "USD", locale: Locale(identifier: "en_US"))
-date.toString(fromFormat: DateFormats.pretty)  // display: Region.current's locale and time zone
-"2026-01-02T03:04:05".toDate()                 // parsing: always en_US_POSIX
-"2026-01-02T03:04:05.123+05:30".toISO8601Date()
-date.add(days: 1)                              // same wall-clock time across DST changes
-Utils.getLastPosted(dateString: createdAt)     // "2 hours ago", or "02 Jan, 2026" after a week
-Utils.getTimestamp(dateString: createdAt)      // "5m", "3h", "2d"
-```
-
-Parsing fixed-format strings always uses `Locale.posix`, so it works whatever the device's language or 12/24-hour setting. Display formatting uses `Region.current` unless you pass a locale or time zone.
-
-Also included: `Array.chunked(into:)` and `move`, JSON conveniences on `Data`, `Encodable` and `Dictionary`, and `DateFormats` / `Unicodes` constants.
-
 ## Development
 
 ```bash
@@ -377,14 +335,10 @@ swift build
 swift test
 ```
 
-To run every test target on iOS, use the `RWLabsDataServiceKit-Package` scheme with a simulator from `xcodebuild -scheme RWLabsDataServiceKit-Package -showdestinations`:
+Building needs a checkout of RWLabsFoundation next to this one (`../RWLabsFoundation`) until the dependency points at its GitHub release.
+
+To run the tests on iOS, use the `RWLabsDataServiceKit` scheme with a simulator from `xcodebuild -scheme RWLabsDataServiceKit -showdestinations`:
 
 ```bash
-xcodebuild test -scheme RWLabsDataServiceKit-Package -destination 'platform=iOS Simulator,id=<simulator-id>'
-```
-
-The country presets in `Sources/RWLabsFoundation/Region+Countries.swift` are generated. To change them, edit `Scripts/GenerateRegions.swift` and run, on macOS:
-
-```bash
-swift Scripts/GenerateRegions.swift > Sources/RWLabsFoundation/Region+Countries.swift
+xcodebuild test -scheme RWLabsDataServiceKit -destination 'platform=iOS Simulator,id=<simulator-id>'
 ```
